@@ -1,13 +1,10 @@
 import './App.css'
-import { Table } from './components/MyTable/Table'
-
-import { MuiTable } from './components/Table/MuiTable'
+import { MyTable } from './components/MyTable/MyTable'
 
 function App() {
   return (
-    <div className='App'>
-      {/* <MuiTable /> */}
-      <Table />
+    <div className="App">
+      <MyTable />
     </div>
   )
 }
