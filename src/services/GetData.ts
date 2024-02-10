@@ -3,7 +3,7 @@ import { IPeople } from './models'
 import axios from 'axios'
 
 export const GetData = (query: string, pageNumber: number) => {
-  const [loading, setLoaing] = useState(true)
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
   const [data, setData] = useState<IPeople[]>([])
   const [hasMore, setHasMore] = useState(false)
@@ -13,32 +13,63 @@ export const GetData = (query: string, pageNumber: number) => {
   }, [query])
 
   useEffect(() => {
-    setLoaing(true)
+    setLoading(true)
     setError(false)
 
-    const controller = new AbortController()
+    const abortController = new AbortController()
+    const { signal } = abortController
 
-    axios
-      .get('https://swapi.dev/api/people/', {
-        params: {
-          search: query,
-          page: pageNumber
-        },
-        signal: controller.signal
-      })
-      .then((response) => {
+    // axios
+    //   .get('https://swapi.dev/api/people/', {
+    //     params: {
+    //       search: query,
+    //       page: pageNumber
+    //     },
+    //     signal: controller.signal
+    //   })
+    //   .then((response) => {
+    //     setData((prevData) => {
+    //       return [...prevData, ...response.data.results]
+    //     })
+    //     setHasMore(response.data.results.length > 0)
+    //     setLoading(false)
+    //   })
+    //   .catch((e) => {
+    //     if (axios.AxiosError) return
+    //     if (axios.isCancel(e)) return
+    //     setError(true)
+    //   })
+    // return () => controller.abort()
+
+    const getData = async () => {
+      try {
+        setLoading(true)
+        setError(false)
+        const response = await axios.get('https://swapi.dev/api/people/', {
+          params: {
+            search: query,
+            page: pageNumber
+          },
+          signal: signal
+        })
         setData((prevData) => {
           return [...prevData, ...response.data.results]
         })
         setHasMore(response.data.results.length > 0)
-        setLoaing(false)
-      })
-      .catch((e) => {
+        setLoading(false)
+      } catch (error) {
+        if (!signal?.aborted) console.log(error)
         if (axios.AxiosError) return
-        if (axios.isCancel(e)) return
+        if (axios.isCancel(error)) return
         setError(true)
-      })
-    return () => controller.abort()
+      }
+    }
+
+    getData()
+
+    return () => {
+      abortController.abort()
+    }
   }, [query, pageNumber])
 
   return { loading, error, data, hasMore }

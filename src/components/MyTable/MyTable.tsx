@@ -27,7 +27,7 @@ export const MyTable = () => {
         }
       })
       if (node) observer.current.observe(node)
-      console.log(node)
+      // console.log(node)
     },
     [loading, hasMore]
   )
@@ -36,8 +36,6 @@ export const MyTable = () => {
     setQuery(event.target.value)
     setPageNumber(1)
   }
-
-  console.log(data)
 
   return (
     <div className='App'>
