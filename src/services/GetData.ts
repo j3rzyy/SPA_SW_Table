@@ -55,11 +55,10 @@ export const GetData = (query: string, pageNumber: number) => {
         setData((prevData) => {
           return [...prevData, ...response.data.results]
         })
-        setHasMore(response.data.results.length > 0)
+        setHasMore(response.data.results.length === 10)
         setLoading(false)
       } catch (error) {
         if (!signal?.aborted) console.log(error)
-        if (axios.AxiosError) return
         if (axios.isCancel(error)) return
         setError(true)
       }
