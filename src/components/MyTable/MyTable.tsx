@@ -44,6 +44,7 @@ export const MyTable = () => {
         <Table>
           <TableHead>
             <TableRow>
+              <TableCell>#</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Gender</TableCell>
               <TableCell>Mass</TableCell>
